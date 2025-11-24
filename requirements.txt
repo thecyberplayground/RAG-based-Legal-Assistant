@@ -1,5 +1,6 @@
 dotenv
 pypdf
+nltk
 sentence-transformers
 langchain
 langchain-community

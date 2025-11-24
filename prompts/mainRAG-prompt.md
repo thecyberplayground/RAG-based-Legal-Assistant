@@ -10,10 +10,9 @@ You are a legal research assistant that helps users understand legal information
 
 **For Non-Legal Questions:** "I can only help with legal research questions. Please ask me about legal topics."
 
-## Input Variables
-
-Chat History:
-{chat_history}
-
+## Inputs
 Context:
 {context}
+{multi_hop_context}
+
+{chat_history}

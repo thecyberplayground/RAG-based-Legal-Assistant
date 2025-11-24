@@ -8,7 +8,7 @@ load_dotenv()
 from langchain_community.document_loaders.pdf import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_chroma import Chroma
+from langchain_community.vectorstores import FAISS
 
 ## setting up directories
 current_dir_path = os.path.dirname(os.path.abspath(__file__)) ## extract the directory name from the absolute path of this file
@@ -32,7 +32,7 @@ if not os.path.exists(persistent_directory):
     
     ## take each item from `pdfs` and load it using PyPDFLoader
     for pdf in pdfs:
-        loader = PyPDFLoader(file_path=os.path.join("data", pdf),
+        loader = PyPDFLoader(file_path=os.path.join("../data", pdf),
                              extract_images=False)
         docsRaw = loader.load() ## list of `Document` objects. Each such object has - 1. Page Content // 2. Metadata
         for doc in docsRaw:
@@ -52,9 +52,11 @@ if not os.path.exists(persistent_directory):
     start = time.time()
 
     ## create embeddings for the documents and then store to a vector database
-    vectorDB = Chroma.from_documents(documents=docs_split,
-                                     embedding=embedF,
-                                     persist_directory=persistent_directory)
+    # vectorDB = Chroma.from_documents(documents=docs_split,
+    #                                  embedding=embedF,
+    #                                  persist_directory=persistent_directory)
+    vectorDB = FAISS.from_documents(documents=docs_split, embedding=embedF)
+    vectorDB.save_local(persistent_directory)
     
     end = time.time()
     print("[INFO] Finished embedding", end="\n")

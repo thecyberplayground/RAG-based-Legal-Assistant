@@ -18,6 +18,7 @@ from langchain_chroma import Chroma
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.documents import Document
 from langchain.load import loads, dumps
+from modules.conversation_history import ConversationSummaryMemory
 
 ## other dependencies
 from typing import List
@@ -45,7 +46,7 @@ vectorDB = Chroma(embedding_function=embedF, persist_directory=persistent_direct
 kb_retriever = vectorDB.as_retriever(search_type="similarity",search_kwargs={"k": 5})
 
 ## main RAG prompt template
-with open("prompts/mainRAG-prompt.md") as f:
+with open("../prompts/mainRAG-prompt.md") as f:
     mainRAGPrompt = f.read()
 
 ## multiquery schema
@@ -61,7 +62,7 @@ class MultiQuery(BaseModel):
 
 def createMultiQueryChain(output_pydantic_object, llm):
     # llm = ChatOpenAI(model="gpt-4.1-mini", temperature=0.15)
-    with open("prompts/multiQuery-prompt.md", "r") as f:
+    with open("../prompts/multiQuery-prompt.md", "r") as f:
         template = f.read()
     parser = JsonOutputParser(pydantic_object=output_pydantic_object)
     prompt = PromptTemplate(
@@ -83,7 +84,7 @@ def generateRRF(all_docs: List[List[Document]], k: int = 60) -> List[Document]:
     return best_docs
 
 def generateResponse(
-        chat_history: List, 
+        chat_history: ConversationSummaryMemory, 
         llm,
         documents: List[Document] = None,
         main_RAG_template=mainRAGPrompt
@@ -106,7 +107,7 @@ if __name__=="__main__":
     llm = ChatCohere(temperature=0.15)
 
     ## initial chat state
-    chat_history = []
+    chat_history = ConversationSummaryMemory(model=llm, k=2)
     welcome_message = "Welcome to the Legal Assistant Bot. How can I help you today? Write `exit` to quit."
     chat_history.append(AIMessage(content=welcome_message))
     
