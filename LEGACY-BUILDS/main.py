@@ -1,8 +1,8 @@
 ## import dependencies
 import time
-# from langchain_cohere import ChatCohere
+from langchain_cohere import ChatCohere
 # from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_ollama import ChatOllama
+# from langchain_ollama import ChatOllama
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from modules.conversation_history import ConversationSummaryMemory
@@ -20,28 +20,25 @@ from langchain_core._api import LangChainBetaWarning
 warnings.filterwarnings("ignore", category=LangChainBetaWarning)
 
 ## environment setup
-# import os
-# from dotenv import load_dotenv
-# load_dotenv()
-# google_key = os.getenv("GOOGLE_API_KEY", None)
-# assert google_key, "[ATTENTION] GOOGLE API KEY IS MISSING!"
-# os.environ["GOOGLE_API_KEY"] = google_key
+import os
+from dotenv import load_dotenv
+load_dotenv()
+google_key = os.getenv("COHERE_API_KEY", None)
+assert google_key, "[ATTENTION] COHERE API KEY IS MISSING!"
+os.environ["COHERE_API_KEY"] = google_key
 
 ## setup PATH
 INPUT_DATA_PATH = "./data"
 OUTPUT_DATA_PATH = "./data-ingestion-local"
 
 ## load the model
-# llm = ChatCohere()
+llm = ChatCohere()
 # llm = ChatGoogleGenerativeAI(
 #     model="gemini-2.0-flash-lite"
 # )
-llm = ChatOllama(model="qwen3:latest")
-chat_history = ConversationSummaryMemory(model=llm, k=3)
+# llm = ChatOllama(model="qwen3:latest")
 
-## setup prompt
-with open("./prompts/mainRAG-prompt.md", "r") as f:
-    main_rag_template = f.read()
+chat_history = ConversationSummaryMemory(model=llm, k=3)
 
 ## main RAG prompt template
 with open("./prompts/mainRAG-prompt.md") as f:
@@ -75,13 +72,6 @@ multihop_retriever = MultiHopRetriever(
     bm25_retriever=bm25_retriever,
     semantic_retriever=semantic_retriever
 )
-
-## complexity dictionary
-# complexity_map = {
-#     "simple_conversation": None,
-#     "complex": multiquery_retriever,
-#     "super_complex": multihop_retriever
-# }
 
 ## ---- START ----
 welcome_message = "Welcome to the Legal Assistant Bot. How can I help you today? Write `exit` to quit."
@@ -122,7 +112,7 @@ while True:
         ## fetch document based on the retriever type decided from `complexity_tier`
         if complexity_tier == "complex":
             retrieved_docs.extend(multiquery_retriever.invoke(user_query))
-        elif complexity_tier == "super_complex":
+        elif complexity_tier == "multi-hop":
             subquery_plus_docs += multihop_retriever.invoke(user_query)
 
         # print(f">>> {complexity_tier}") ## for debugging

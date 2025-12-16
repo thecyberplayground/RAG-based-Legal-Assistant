@@ -1,8 +1,8 @@
 ## import dependencies
 import time
-# from langchain_cohere import ChatCohere
+from langchain_cohere import ChatCohere
 # from langchain_ollama import ChatOllama
-from langchain_google_genai import ChatGoogleGenerativeAI
+# from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -33,11 +33,11 @@ INPUT_DATA_PATH = "./data"
 OUTPUT_DATA_PATH = "./data-ingestion-local"
 
 ## load the model
-# llm = ChatCohere()
+llm = ChatCohere()
 # llm = ChatOllama(model="qwen3:latest")
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash-lite"
-)
+# llm = ChatGoogleGenerativeAI(
+#     model="gemini-2.0-flash-lite"
+# )
 # chat_history = ConversationSummaryMemory(model=llm, k=3)
 
 ## setup prompt
@@ -102,7 +102,7 @@ eval_dataset = pd.read_csv("./RAGAS-dataset/eval-dataset.csv")
 answers: List[str] = [] ## AI responses for the questions asked
 master_retrieved_docs_container: List[List[str]] = [] ## an array containing list of documents for each query
 try:
-    for index, row in eval_dataset.iterrows():
+    for index, (_, row) in enumerate(eval_dataset.iterrows(), start=1):
         print(f"> Fetching answer for Q: {index+1}")
         retrieved_docs = []
         subquery_plus_docs = ""
@@ -117,7 +117,7 @@ try:
         ## fetch document based on the retriever type decided from `complexity_tier`
         if complexity_tier == "complex":
             retrieved_docs.extend(multiquery_retriever.invoke(user_query))
-        elif complexity_tier == "super_complex":
+        elif complexity_tier == "multi-hop":
             subquery_plus_docs += multihop_retriever.invoke(user_query)
 
         ## response generation
@@ -129,16 +129,17 @@ try:
             documents=None if len(retrieved_docs) == 0 else retrieved_docs,
         )
         ai_resp = resp.generate_response()
-        print(f"> AI: (complexity_tier) {ai_resp}")
+        print(f"> AI: ({complexity_tier}) {ai_resp}")
         print(f"> Context Injected: {resp.context}")
         answers.append(ai_resp) ## store the answers
 
         ## append documents according to the retriever type -> append item should be List[str]
         if complexity_tier == "complex":
             master_retrieved_docs_container.append([doc.page_content for doc in retrieved_docs])
-        elif complexity_tier == "super_complex":
+        elif complexity_tier == "multi-hop":
             master_retrieved_docs_container.append([doc.page_content for doc in multihop_retriever.retrieved_respective_documents])
 
+        print(f"> Nap for 60 seconds.", end="\n\n")
         time.sleep(60)
 except Exception as e:
     print(e)
@@ -147,6 +148,6 @@ finally:
         eval_dataset['answer'] = answers
         eval_dataset['retrieved_contexts'] = master_retrieved_docs_container
         print(eval_dataset)
-        eval_dataset.to_csv("./RAGAS-dataset/eval-dataset-final-2.csv", index=False)
+        eval_dataset.to_csv("./RAGAS-dataset/eval-dataset-final-3.csv", index=False)
     else:
         print(f"[ATTENTION] Incomplete Generation.\n> Documents Retriever: {len(master_retrieved_docs_container)}\n> Answers Generated: {len(answers)}")

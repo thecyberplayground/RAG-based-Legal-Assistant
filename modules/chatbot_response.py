@@ -1,41 +1,35 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from langchain.schema import Document
+from modules.conversation_history import ConversationSummaryMemory
+from typing import List
 
 class ChatbotResponse:
-    def __init__(self, model, memory, rag_prompt_template, subquery_docs = "", documents = None) -> None:
-        self.memory = memory
+    def __init__(self, model, rag_prompt_template) -> None:
         self.model = model
-        self.documents = documents
-        self.subquery_docs = subquery_docs
         self.rag_prompt_template = rag_prompt_template
-        # self.context = ""
 
-    def generate_response(self) -> str:
-        if not self.documents:
-            context = ""
-        else:
-            context = "\n"
-            for rank, doc in enumerate(self.documents, start=1):
-                context += f"Relevant Document: {rank}" + doc.page_content + "\n"
+    def invoke(
+            self,
+            memory: ConversationSummaryMemory,
+            documents: List[Document] = [],
+            subquery_docs: str = ""
+    ):
+        ## context placeholder
+        context = "\n"
+
+        ## unpack documents for context
+        if len(documents) > 0:
+            for rank, doc in enumerate(documents, start=1):
+                context += f"Relevant Document: {rank}::\n" + doc.page_content + "\n"
+
+        ## llm call for generating the response
         prompt = ChatPromptTemplate.from_template(self.rag_prompt_template)
         chain = prompt | self.model | StrOutputParser()
         resp = chain.invoke({
-            "chat_history": self.memory,
+            "chat_history": memory,
             "context": context,
-            "multi_hop_context": self.subquery_docs
+            "multi_hop_context": subquery_docs
         })
-        return resp
 
-    # def generate_response(self) -> str:
-    #     if self.documents:
-    #         self.context += "\n"
-    #         for rank, doc in enumerate(self.documents, start=1):
-    #             self.context += f"Relevant Document: {rank}" + doc.page_content + "\n"
-    #     prompt = ChatPromptTemplate.from_template(self.rag_prompt_template)
-    #     chain = prompt | self.model | StrOutputParser()
-    #     resp = chain.invoke({
-    #         "chat_history": self.memory,
-    #         "context": self.context,
-    #         "multi_hop_context": self.subquery_docs
-    #     })
-    #     return resp
+        return resp
