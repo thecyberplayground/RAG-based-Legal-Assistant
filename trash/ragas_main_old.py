@@ -148,6 +148,6 @@ finally:
         eval_dataset['answer'] = answers
         eval_dataset['retrieved_contexts'] = master_retrieved_docs_container
         print(eval_dataset)
-        eval_dataset.to_csv("./RAGAS-dataset/eval-dataset-final-3.csv", index=False)
+        eval_dataset.to_csv("./RAGAS-dataset/eval-dataset-final.csv", index=False)
     else:
         print(f"[ATTENTION] Incomplete Generation.\n> Documents Retriever: {len(master_retrieved_docs_container)}\n> Answers Generated: {len(answers)}")

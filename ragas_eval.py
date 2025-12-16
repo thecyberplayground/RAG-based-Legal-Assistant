@@ -125,7 +125,7 @@ for index, row in eval_df.iterrows():
     time.sleep(60)
 
 ## save all this to a dataframe
-eval_df['answers'] = answers
-eval_df['retrieved_documents'] = retrieved_documents
+eval_df['response'] = answers
+eval_df['retrieved_contexts'] = retrieved_documents
 
-eval_df.to_csv("./RAGAS-dataset/eval-dataset-final-3.csv", index=False)
+eval_df.to_csv("./RAGAS-dataset/eval-dataset-final.csv", index=False)
