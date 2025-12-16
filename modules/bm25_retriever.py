@@ -6,16 +6,12 @@ from modules.preprocess_documents import load_chunk_store
 ## BM25 retriever
 def instantiate_bm25retriever(documents, tokenizer = None):
     if not tokenizer:
-        return BM25Retriever.from_documents(documents=documents, k=3)
+        return BM25Retriever.from_documents(documents=documents, k=10)
     else:
-        return BM25Retriever.from_documents(documents=documents, preprocess_func=tokenizer, k=3)
+        return BM25Retriever.from_documents(documents=documents, preprocess_func=tokenizer, k=10)
 
 # ---------------------------------------------------------------------------------------------------------
 if __name__=="__main__":
-    ## set up directories
-    # current_dir_path = os.path.dirname(os.path.abspath(__file__)) ## extract the directory name from the absolute path of this file
-    # data_path = os.path.join(current_dir_path, "data") ## create path for the `data` folder
-    
     ## load and chunk
     preprocessed_docs = load_chunk_store(data_path="./data")
 
@@ -29,8 +25,8 @@ if __name__=="__main__":
     retrieved_docs = bm25_retriever.invoke(user_query)
 
     ## print result
-    # print(f"\n\n> Retriever Docs: ")
-    # for index, docs in enumerate(retrieved_docs, start=1):
-    #     print(f"{index}:\n\n\n{docs.page_content}")
+    print("\n\n> Retriever Docs: ")
+    for index, docs in enumerate(retrieved_docs, start=1):
+        print(f"{index}:\n\n\n{docs.page_content}")
     print(f"Output:{type(retrieved_docs)}")
     print(f"Output:{type(retrieved_docs[0])}")

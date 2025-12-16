@@ -38,7 +38,7 @@ class QueryComplexity:
             self,
             model,
             prompt_template: str = complexity_prompt,
-            pydantic_schema=QueryComplexitySchema
+            pydantic_schema = QueryComplexitySchema
     ):
         self.model = model
         self.template = prompt_template

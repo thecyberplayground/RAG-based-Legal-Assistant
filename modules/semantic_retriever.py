@@ -1,19 +1,18 @@
-## settings up the env
-import os
-from dotenv import load_dotenv
-load_dotenv()
-
 ## langchain dependencies
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from typing import List
 from langchain.schema import Document
 
+## settings up the env
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 class SemanticRetriever:
     """
     Semantic Retriever for FAISS:
-    -> create an instance with embedding mode, prepped documents and output path to save the vector store locally
+    -> create an instance with embedding model, prepped documents and output path to save the vector store locally
     -> access the semantic retriever by .retriever
     -> invoke by .retriever.invoke(user_query)
     """
@@ -37,5 +36,30 @@ class SemanticRetriever:
             self.__build_vectordb()
         ## if already exists, skip building
         vector_db = FAISS.load_local(self.vectordb_output_path, embeddings=self.embedding_function, allow_dangerous_deserialization=True)
-        semantic_retriever = vector_db.as_retriever(search_type="similarity",search_kwargs={"k": 5})
+        semantic_retriever = vector_db.as_retriever(search_type="similarity",search_kwargs={"k": 10})
         return semantic_retriever
+    
+## ---- TEST ----
+if __name__=="__main__":
+    from modules.preprocess_documents import load_chunk_store
+    import shutil
+
+    preprocessed_docs = load_chunk_store(data_path="./data")
+    embedF = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    dummy_output_path = "./data-ingestion-local/test-semantic-retriever"
+
+    dense_retriever = SemanticRetriever(
+        embedding_function=embedF,
+        prepped_docs=preprocessed_docs,
+        vectordb_output_path=dummy_output_path
+    ).retriever
+
+    user_query = "Suppose a marriage is challenged as void under Section 24 on the ground that one party was already married, while the couple simultaneously seeks registration of an earlier ceremony under Chapter III claiming long-term cohabitation. How should the decision-maker reconcile the conditions in Section 15(b) (requiring no existing spouse) with the legitimacy protections for children under Section 26, exitand what procedural consequences follow if an appeal under Section 17 is already"
+
+    relevant_documents = dense_retriever.invoke(user_query)
+
+    for index, doc in enumerate(relevant_documents, start=1):
+        print(f"{index}:: \n{doc.page_content}")
+
+    ## once done delete the vector db
+    shutil.rmtree(dummy_output_path)

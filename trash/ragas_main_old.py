@@ -29,8 +29,8 @@ assert google_key, "[ATTENTION] GOOGLE API KEY IS MISSING!"
 os.environ["GOOGLE_API_KEY"] = google_key
 
 ## setup PATH
-INPUT_DATA_PATH = "./data"
-OUTPUT_DATA_PATH = "./data-ingestion-local"
+INPUT_DATA_PATH = "../data"
+OUTPUT_DATA_PATH = "../data-ingestion-local"
 
 ## load the model
 llm = ChatCohere()
@@ -41,7 +41,7 @@ llm = ChatCohere()
 # chat_history = ConversationSummaryMemory(model=llm, k=3)
 
 ## setup prompt
-with open("./prompts/mainRAG-prompt-eval.md") as f:
+with open("../prompts/mainRAG-prompt-eval.md") as f:
     eval_rag_prompt = f.read()
 
 ## chatbot response
@@ -98,7 +98,7 @@ multihop_retriever = MultiHopRetriever(
 )
 
 ### ------------- EVALUATION LOOP ----------------
-eval_dataset = pd.read_csv("./RAGAS-dataset/eval-dataset.csv")
+eval_dataset = pd.read_csv("../RAGAS-dataset/eval-dataset.csv")
 answers: List[str] = [] ## AI responses for the questions asked
 master_retrieved_docs_container: List[List[str]] = [] ## an array containing list of documents for each query
 try:

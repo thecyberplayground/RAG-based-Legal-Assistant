@@ -1,5 +1,8 @@
 ## virtual environment
 .venv
 
+## environment variable
+.env
+
 ## local vectorstore
 data-ingestion-local

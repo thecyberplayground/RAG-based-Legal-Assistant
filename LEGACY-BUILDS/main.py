@@ -28,8 +28,8 @@ assert google_key, "[ATTENTION] COHERE API KEY IS MISSING!"
 os.environ["COHERE_API_KEY"] = google_key
 
 ## setup PATH
-INPUT_DATA_PATH = "./data"
-OUTPUT_DATA_PATH = "./data-ingestion-local"
+INPUT_DATA_PATH = "../data"
+OUTPUT_DATA_PATH = "../data-ingestion-local"
 
 ## load the model
 llm = ChatCohere()
@@ -41,7 +41,7 @@ llm = ChatCohere()
 chat_history = ConversationSummaryMemory(model=llm, k=3)
 
 ## main RAG prompt template
-with open("./prompts/mainRAG-prompt.md") as f:
+with open("../prompts/mainRAG-prompt.md") as f:
     rag_prompt_template = f.read()
 
 ## embedding model

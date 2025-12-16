@@ -3456,6 +3456,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "dotenv" },
     { name = "faiss-cpu" },
+    { name = "hf-xet" },
     { name = "ipykernel" },
     { name = "ipywidgets" },
     { name = "langchain" },
@@ -3475,12 +3476,14 @@ dependencies = [
     { name = "rank-bm25" },
     { name = "sentence-transformers" },
     { name = "streamlit" },
+    { name = "tqdm" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "faiss-cpu", specifier = ">=1.13.0" },
+    { name = "hf-xet", specifier = ">=1.1.7" },
     { name = "ipykernel", specifier = ">=7.1.0" },
     { name = "ipywidgets", specifier = ">=8.1.8" },
     { name = "langchain", specifier = ">=0.3.27" },
@@ -3500,6 +3503,7 @@ requires-dist = [
     { name = "rank-bm25", specifier = ">=0.2.2" },
     { name = "sentence-transformers", specifier = ">=5.1.0" },
     { name = "streamlit", specifier = ">=1.48.0" },
+    { name = "tqdm", specifier = ">=4.67.1" },
 ]
 
 [[package]]
