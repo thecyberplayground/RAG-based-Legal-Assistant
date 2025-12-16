@@ -3,6 +3,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from pydantic import BaseModel, Field
 from typing import Literal
+from modules.conversation_history import ConversationSummaryMemory
 
 ## prompt template
 with open("./prompts/decide_query_complexity.md", "r", encoding="utf-8") as file:
@@ -31,21 +32,17 @@ class QueryComplexitySchema(BaseModel):
         """
     )
 
-
+## determine query complexity based on the user query and previous conversation
 class QueryComplexity:
     def __init__(
             self,
-            user_query: str,
-            memory,
             model,
-            template: str = complexity_prompt,
+            prompt_template: str = complexity_prompt,
             pydantic_schema=QueryComplexitySchema
     ):
-        self.user_query = user_query
-        self.memory = memory
-        self.template = template
         self.model = model
-        self.query_complexity_schema = pydantic_schema
+        self.template = prompt_template
+        self.output_schema = pydantic_schema
 
     @staticmethod
     def __initiate_chain(template, model, pydantic_schema):
@@ -58,22 +55,70 @@ class QueryComplexity:
         chain = prompt | model | parser
         return chain
 
-    @property
-    def decide_complexity(self):
+    def invoke(self, user_query: str, memory: ConversationSummaryMemory):
         chain = self.__initiate_chain(
             template=self.template,
             model=self.model,
-            pydantic_schema=self.query_complexity_schema
+            pydantic_schema=self.output_schema
         )
         resp = chain.invoke(
             {
-                "user_query": self.user_query,
-                "memory": self.memory,
+                "user_query": user_query,
+                "memory": memory,
             }
         )
         return resp["complexity"]
 
-
 ## --- TEST EXECUTION ---
 if __name__ == "__main__":
-    pass
+    from langchain_cohere import ChatCohere
+    from langchain_core.messages import AIMessage, HumanMessage
+
+    ## set up environment
+    import os
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
+    cohere_api = os.getenv("COHERE_API_KEY")
+    assert cohere_api, "[ALERT] COHERE API KEY IS NOT IN THE ENVIRONMENT!"
+    os.environ['COHERE_API_KEY'] = cohere_api
+
+    ## llm
+    llm = ChatCohere(temperature=0.2)
+
+    ## dummy messages
+    messages = [
+        AIMessage(content="Hi! How may I assist you today?"),
+        HumanMessage(content="Who play Iron Man in the MCU?"),
+        AIMessage(content="Robert Downey Jr. plays the Iron Man character in MCU."),
+        HumanMessage(content="What are his some of the best works?"),
+        AIMessage(content="His best works include Chaplin, Sherlock Holmes, The Judge, Oppenheimer and many more."),
+        HumanMessage(content="Has he ever acted in a movie along with Tom Cruise?"),
+        AIMessage(content="Yes, he worked in Tropic Thunder with Tom Cruise.")
+    ]
+
+    ## add the dummy messages to memory
+    memory = ConversationSummaryMemory(model=llm, k=2)
+    for turn in messages:
+        memory.append(turn)
+
+    latest_user_query = """
+    Considering Robert Downey Jr.’s role in Tropic Thunder alongside Tom Cruise, can you identify another actor from that same film who later collaborated with Marvel Studios, specify the MCU project they were involved in, and explain how the genre and role type of that MCU appearance differed from their role in Tropic Thunder?
+    """
+
+    ## instantiate complexity object
+    complexity_decider = QueryComplexity(model=llm)
+
+    ## invoke to get the complexity tier
+    inferred_complexity = complexity_decider.invoke(
+        user_query=latest_user_query,
+        memory=memory
+    )
+
+    print(f"Inferred complexity: {inferred_complexity}")
+
+    # """
+    # (rag-based-legal-assistant) C:\Users\sodey\Downloads\_projects\RAG-based-Legal-Assistant>uv run -m modules.decide_query_complexity
+    # Inferred complexity: complex
+    # """
