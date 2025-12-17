@@ -18,8 +18,8 @@ from langchain_core._api import LangChainBetaWarning
 warnings.filterwarnings("ignore", category=LangChainBetaWarning)
 
 ## setup PATH
-INPUT_DATA_PATH = "./data"
-OUTPUT_DATA_PATH = "./data-ingestion-local"
+INPUT_DATA_PATH = "./data/raw"
+OUTPUT_DATA_PATH = "./data/vectors"
 
 ## main RAG prompt template
 with open("./prompts/mainRAG-prompt.md") as f:
