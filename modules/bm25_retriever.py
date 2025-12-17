@@ -13,7 +13,7 @@ def instantiate_bm25retriever(documents, tokenizer = None):
 # ---------------------------------------------------------------------------------------------------------
 if __name__=="__main__":
     ## load and chunk
-    preprocessed_docs = load_chunk_store(data_path="./data")
+    preprocessed_docs = load_chunk_store(data_path="./data/raw")
 
     ## BM25 retriever
     bm25_retriever = instantiate_bm25retriever(documents=preprocessed_docs, tokenizer=word_tokenize)

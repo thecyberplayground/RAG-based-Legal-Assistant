@@ -36,7 +36,7 @@ def load_chunk_store(data_path: str) -> List[Document]:
 
 ## ---- TEST ----
 if __name__=="__main__":
-    folder_location = "./data"
+    folder_location = "./data/raw"
     prepped_docs = load_chunk_store(folder_location)
     print(prepped_docs, end="\n\n\n")
     print(f"Number of Document Chunks: {len(prepped_docs)}")

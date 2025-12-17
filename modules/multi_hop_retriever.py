@@ -125,8 +125,8 @@ if __name__ == "__main__":
     from modules.preprocess_documents import load_chunk_store
     from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 
-    INPUT_DATA_PATH = "./data"
-    OUTPUT_DATA_PATH = "./data-ingestion-local"
+    INPUT_DATA_PATH = "./data/raw"
+    OUTPUT_DATA_PATH = "./data/vectors"
 
     import os
     from dotenv import load_dotenv

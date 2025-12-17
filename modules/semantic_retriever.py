@@ -44,14 +44,16 @@ if __name__=="__main__":
     from modules.preprocess_documents import load_chunk_store
     import shutil
 
-    preprocessed_docs = load_chunk_store(data_path="./data")
+    INPUT_PATH = "./data/raw"
+    DUMMY_OUTPUT_PATH = "./data/vectors/dummy"
+
+    preprocessed_docs = load_chunk_store(data_path=INPUT_PATH)
     embedF = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    dummy_output_path = "./data-ingestion-local/test-semantic-retriever"
 
     dense_retriever = SemanticRetriever(
         embedding_function=embedF,
         prepped_docs=preprocessed_docs,
-        vectordb_output_path=dummy_output_path
+        vectordb_output_path=DUMMY_OUTPUT_PATH
     ).retriever
 
     user_query = "Suppose a marriage is challenged as void under Section 24 on the ground that one party was already married, while the couple simultaneously seeks registration of an earlier ceremony under Chapter III claiming long-term cohabitation. How should the decision-maker reconcile the conditions in Section 15(b) (requiring no existing spouse) with the legitimacy protections for children under Section 26, exitand what procedural consequences follow if an appeal under Section 17 is already"
@@ -62,4 +64,4 @@ if __name__=="__main__":
         print(f"{index}:: \n{doc.page_content}")
 
     ## once done delete the vector db
-    shutil.rmtree(dummy_output_path)
+    shutil.rmtree(DUMMY_OUTPUT_PATH)

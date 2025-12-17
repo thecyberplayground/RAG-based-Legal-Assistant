@@ -80,8 +80,8 @@ if __name__ == "__main__":
     from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 
     ## setup PATH
-    INPUT_DATA_PATH = "./data"
-    OUTPUT_DATA_PATH = "./data-ingestion-local"
+    INPUT_DATA_PATH = "./data/raw"
+    OUTPUT_DATA_PATH = "./data/vectors"
 
     ## set up environment
     import os
