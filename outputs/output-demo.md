@@ -36,6 +36,19 @@ If you have further legal questions, feel free to ask!
 > AI: Chat ended! See ya.
 ```
 
+## Output (For irrelevant queries)
+```
+(rag-based-legal-assistant) C:\Users\sodey\Downloads\_projects\RAG-based-Legal-Assistant>uv run app.py
+> AI: Welcome to the Legal Assistant Bot. How can I help you today? Write `exit` to quit.
+> Human: Just watched the movie Marriage Story this friday. What do you think about this movie?
+> AI: (simple_conversation) I'm here to assist you with Legal queries. Please refrain yourself from asking question outside this scope and chit-chatting.
+> Human: Can you help me with a art purchasing decision?
+> AI: (simple_conversation) I'm here to assist you with Legal queries. Please refrain yourself from asking question outside this scope and chit-chatting.
+> Human: 
+
+[ALERT] ^C: Keyboard Interruption detected. Session Terminated!!
+```
+
 ## Output (RAGAS-Eval)
 ```
 (rag-based-legal-assistant) C:\Users\sodey\Downloads\_projects\RAG-based-Legal-Assistant>uv run ragas-eval.py

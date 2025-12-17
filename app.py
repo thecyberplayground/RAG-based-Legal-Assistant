@@ -99,6 +99,20 @@ while True:
             retrieved_docs.extend(multiquery_retriever.invoke(user_query=latest_user_query, memory=chat_history))
         elif complexity_tier == "multi-hop":
             subquery_plus_docs += multihop_retriever.invoke(user_query=latest_user_query, memory=chat_history)
+        ## forgot to handle "Irrelevant" complexity tier -> for now this is the way to go, will fix later
+        else:
+            ai_resp = "I'm here to assist you with Legal queries. Please refrain yourself from asking question outside this scope and chit-chatting."
+
+            ## print AI response
+            print(f"\033[1m> AI:\033[0m ({complexity_tier}) ", end="")
+            for letter in ai_resp:
+                print(letter, flush=True, end="")
+                time.sleep(0.03)
+
+            ## append AI response to chat history
+            chat_history.append(AIMessage(content=ai_resp))
+
+            continue
 
         ## STORE IN CHAT MEMORY
         chat_history.append(HumanMessage(content=latest_user_query))  ## store it in the history
