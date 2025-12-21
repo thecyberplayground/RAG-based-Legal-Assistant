@@ -1,11 +1,11 @@
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from typing import Union, Any
+from typing import Union
 
 ## class for conversation memory
 class ConversationSummaryMemory:
-    def __init__(self, model: Any, k: int) -> None:
+    def __init__(self, model, k: int) -> None:
         self.conversations = []
         self.model = model
         self.window = k*2

@@ -6,14 +6,14 @@ from ragas.metrics import faithfulness, answer_correctness
 from ragas.run_config import RunConfig
 from ast import literal_eval
 
-# Load as Dataset, then convert to pandas
+## load as Dataset -> convert to pandas DataFrame
 dataset = Dataset.from_csv("RAGAS-dataset/eval-dataset-final.csv")
 df = dataset.to_pandas()
 
-# Now you can use apply
+## apply literal eval to unwrap the lists (since it gets stored wrapped around a string while calling .to_csv())
 df['retrieved_contexts'] = df['retrieved_contexts'].apply(literal_eval)
 
-# Convert back to Dataset if needed
+## convert back to Dataset for RAGAS compatibility
 dataset = Dataset.from_pandas(df)
 
 ## evaluation
@@ -24,5 +24,9 @@ score = evaluate(
     metrics=[faithfulness, answer_correctness],
     run_config=RunConfig(timeout=1200)
 )
+
+## convert to pandas DataFrame
 df = score.to_pandas()
+
+## save it locally
 df.to_csv('./RAGAS-dataset/eval-score.csv', index=False)

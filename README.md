@@ -113,7 +113,6 @@ OPENAI_API_KEY=your_openai_api_key_here  # Optional, if using OpenAI models
 RAG-based-Legal-Assistant/
 ├── .venv/                          # Virtual environment (local)
 ├── data/                           # Raw and processed legal documents for indexing
-├── LEGACY-BUILDS/                  # Deprecated or experimental implementations
 ├── modules/                        # Core RAG and chatbot logic
 │   ├── __init__.py
 │   ├── _dependency_sequence.md     # Explainable dependency/execution flow notes
