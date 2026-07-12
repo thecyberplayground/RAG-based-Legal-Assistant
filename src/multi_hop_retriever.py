@@ -7,8 +7,8 @@ from typing import Dict, List
 
 from ragas.messages import HumanMessage, AIMessage
 
-from modules.conversation_history import ConversationSummaryMemory
-from modules.rrf_score import RRF
+from src.conversation_history import ConversationSummaryMemory
+from src.rrf_score import RRF
 
 with open("./prompts/multihop-prompt.md", "r", encoding="utf-8") as f:
     multihop_template = f.read()
@@ -120,9 +120,9 @@ class MultiHopRetriever:
 ##---- TESTING EXECUTION ----
 if __name__ == "__main__":
     from langchain_cohere import ChatCohere
-    from modules.bm25_retriever import instantiate_bm25retriever
-    from modules.semantic_retriever import SemanticRetriever
-    from modules.preprocess_documents import load_chunk_store
+    from src.bm25_retriever import instantiate_bm25retriever
+    from src.semantic_retriever import SemanticRetriever
+    from src.preprocess_documents import load_chunk_store
     from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 
     INPUT_DATA_PATH = "./data/raw"
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     print(multihop_response)
     #
     # """
-    # (rag-based-legal-assistant) C:\Users\sodey\Downloads\_projects\RAG-based-Legal-Assistant>uv run -m modules.multi_hop_retriever
+    # (rag-based-legal-assistant) C:\Users\sodey\Downloads\_projects\RAG-based-Legal-Assistant>uv run -m src.multi_hop_retriever
     # > Try: 0
     # > EoG Status: False
     # > Subquery: Identify the section in the Act that specifies age requirements for males and females, including any exceptions or discretion for individuals aged 17.

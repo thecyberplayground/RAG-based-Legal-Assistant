@@ -1,7 +1,7 @@
 ## import langchain dependencies
 from langchain_community.retrievers import BM25Retriever
 from nltk.tokenize import word_tokenize
-from modules.preprocess_documents import load_chunk_store
+from src.preprocess_documents import load_chunk_store
 
 ## BM25 retriever
 def instantiate_bm25retriever(documents, tokenizer = None):

@@ -3,7 +3,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from pydantic import BaseModel, Field
 from typing import Literal
-from modules.conversation_history import ConversationSummaryMemory
+from src.conversation_history import ConversationSummaryMemory
 
 ## prompt template
 with open("./prompts/decide_query_complexity.md", "r", encoding="utf-8") as file:
@@ -119,6 +119,6 @@ if __name__ == "__main__":
     print(f"Inferred complexity: {inferred_complexity}")
 
     # """
-    # (rag-based-legal-assistant) C:\Users\sodey\Downloads\_projects\RAG-based-Legal-Assistant>uv run -m modules.decide_query_complexity
+    # (rag-based-legal-assistant) C:\Users\sodey\Downloads\_projects\RAG-based-Legal-Assistant>uv run -m src.decide_query_complexity
     # Inferred complexity: complex
     # """

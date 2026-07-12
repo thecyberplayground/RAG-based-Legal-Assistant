@@ -1,16 +1,16 @@
 ## import dependencies
 import time
 import os
-from modules.language_model import llm, embedF
+from src.model_configs import llm, embedF
 from langchain_core.messages import AIMessage, HumanMessage
-from modules.conversation_history import ConversationSummaryMemory
-from modules.preprocess_documents import load_chunk_store
-from modules.decide_query_complexity import QueryComplexity
-from modules.chatbot_response import ChatbotResponse
-from modules.bm25_retriever import instantiate_bm25retriever
-from modules.semantic_retriever import SemanticRetriever
-from modules.multi_query_retriever import MultiQueryRetriever
-from modules.multi_hop_retriever import MultiHopRetriever
+from src.conversation_history import ConversationSummaryMemory
+from src.preprocess_documents import load_chunk_store
+from src.decide_query_complexity import QueryComplexity
+from src.chatbot_response import ChatbotResponse
+from src.bm25_retriever import instantiate_bm25retriever
+from src.semantic_retriever import SemanticRetriever
+from src.multi_query_retriever import MultiQueryRetriever
+from src.multi_hop_retriever import MultiHopRetriever
 
 ## supress langchain warning
 import warnings

@@ -54,6 +54,6 @@ if __name__=="__main__":
     print(rrf.rearrange(3))
 
     # """
-    # (rag-based-legal-assistant) C:\Users\sodey\Downloads\_projects\RAG-based-Legal-Assistant>uv run -m modules.rrf_score
+    # (rag-based-legal-assistant) C:\Users\sodey\Downloads\_projects\RAG-based-Legal-Assistant>uv run -m src.rrf_score
     # [Document(metadata={}, page_content='this is document four'), Document(metadata={}, page_content='this is document three'), Document(metadata={}, page_content='this is document two')]
     # """

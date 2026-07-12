@@ -1,7 +1,7 @@
 ## import dependencies
 from datasets import Dataset
 from ragas import evaluate
-from modules.language_model import ragas_eval_llm, ragas_eval_embedF
+from src.model_configs import ragas_eval_llm, ragas_eval_embedF
 from ragas.metrics import faithfulness, answer_correctness
 from ragas.run_config import RunConfig
 from ast import literal_eval
