@@ -1,0 +1,36 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="ignoredPackages">
+        <list>
+          <option value="dotenv" />
+          <option value="pypdf" />
+          <option value="sentence-transformers" />
+          <option value="langchain" />
+          <option value="langchain-community" />
+          <option value="langchain-openai" />
+          <option value="langchain-huggingface" />
+          <option value="langchain-chroma" />
+          <option value="streamlit" />
+          <option value="nltk" />
+          <option value="langchain-text-splitters" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="N806" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyStubPackagesAdvertiser" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="pandas-stubs==2.3.3.251219" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

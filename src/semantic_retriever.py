@@ -41,7 +41,7 @@ class SemanticRetriever:
     
 ## ---- TEST ----
 if __name__=="__main__":
-    from modules.preprocess_documents import load_chunk_store
+    from src.preprocess_documents import load_chunk_store
     import shutil
 
     INPUT_PATH = "./data/raw"

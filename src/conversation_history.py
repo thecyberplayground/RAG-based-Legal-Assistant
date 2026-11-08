@@ -111,7 +111,7 @@ if __name__=="__main__":
    print(memory)
 
    # """
-   # (rag-based-legal-assistant) C:\Users\sodey\Downloads\_projects\RAG-based-Legal-Assistant>uv run -m modules.conversation_history
+   # (rag-based-legal-assistant) C:\Users\sodey\Downloads\_projects\RAG-based-Legal-Assistant>uv run -m src.conversation_history
    #  --------------------------------------------Chat History--------------------------------------------
    #  Last 4 turns of the Conversation:
    #
